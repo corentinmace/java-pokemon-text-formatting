@@ -13,28 +13,20 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import net.miginfocom.swing.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import utils.Colors;
 import utils.Format;
-
+import utils.JSON;
 
 
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * @author PC- Corentin
  */
 public class MainFrame extends JFrame {
-
-    private static final ArrayList<Long> presetsChar = new ArrayList<>();
-    private static final ArrayList<Long> presetsLines = new ArrayList<>();
-
+    private static JSONArray generationPresets = null;
     public static void main(String[] args) throws IOException, ParseException {
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf());
@@ -47,9 +39,7 @@ public class MainFrame extends JFrame {
             MainFrame mainFrame = null;
             try {
                 mainFrame = new MainFrame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ParseException e) {
+            } catch (IOException | ParseException e) {
                 throw new RuntimeException(e);
             }
             mainFrame.setVisible(true);
@@ -61,26 +51,17 @@ public class MainFrame extends JFrame {
     public MainFrame() throws IOException, ParseException {
         initComponents();
 
-        // Read json with org.json.simple
-        JSONParser parser = new JSONParser();
-        JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getClass().getResource("/format_preset.json").getFile()));
+        generationPresets = JSON.parseJsonToArray("format_preset.json");
 
-        for (Object o : jsonArray) {
+        for (Object o : generationPresets) {
             JSONObject preset = (JSONObject) o;
 
             String name = (String) preset.get("name");
             presetInput.addItem(name);
-
-            Long lines = (Long) preset.get("lines");
-            presetsLines.add(lines);
-
-            Long chars = (Long) preset.get("chars");
-            presetsChar.add(chars);
         }
-        System.out.println(presetsLines);
 
-        charInput.getModel().setValue(presetsChar.get(0));
-        linesInput.getModel().setValue(presetsLines.get(0));
+        charInput.getModel().setValue(utils.JSON.getKeyFromJSON(0, generationPresets, "chars"));
+        linesInput.getModel().setValue(utils.JSON.getKeyFromJSON(0, generationPresets, "lines"));
     }
 
     private void thisWindowClosing(WindowEvent e) {
@@ -102,10 +83,9 @@ public class MainFrame extends JFrame {
 
     private void presetInput(ActionEvent e) {
         if(presetInput.getSelectedIndex() == -1) return;
-        if(presetsChar.size() == 0 || presetsLines.size() == 0) return;
-        int index = presetInput.getSelectedIndex();
-        charInput.getModel().setValue(presetsChar.get(index));
-        linesInput.getModel().setValue(presetsLines.get(index));
+
+        charInput.getModel().setValue(utils.JSON.getKeyFromJSON(presetInput.getSelectedIndex(), generationPresets, "chars"));
+        linesInput.getModel().setValue(utils.JSON.getKeyFromJSON(presetInput.getSelectedIndex(), generationPresets, "lines"));
     }
 
     private void presetInputItemStateChanged(ItemEvent e) {
