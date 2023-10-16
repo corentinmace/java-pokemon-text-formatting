@@ -63,7 +63,7 @@ public class MainFrame extends JFrame {
 
         // Read json with org.json.simple
         JSONParser parser = new JSONParser();
-        JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("/Users/corentinmace/Documents/Projects/pokeds-text-formatter/ressources/format_preset.json"));
+        JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(getClass().getResource("/format_preset.json").getFile()));
 
         for (Object o : jsonArray) {
             JSONObject preset = (JSONObject) o;
@@ -125,7 +125,6 @@ public class MainFrame extends JFrame {
         gen4pan = new JPanel();
         label1 = new JLabel();
         label2 = new JLabel();
-        textArea1 = new JTextArea();
         scrollPane1 = new JScrollPane();
         inputText = new JEditorPane();
         panel2 = new JPanel();
@@ -214,7 +213,6 @@ public class MainFrame extends JFrame {
                 label2.setText("Preview");
                 label2.setFont(new Font("Yu Gothic UI", Font.BOLD, 16));
                 gen4pan.add(label2, "cell 2 0");
-                gen4pan.add(textArea1, "cell 0 1");
 
                 //======== scrollPane1 ========
                 {
@@ -332,7 +330,6 @@ public class MainFrame extends JFrame {
     private JPanel gen4pan;
     private JLabel label1;
     private JLabel label2;
-    private JTextArea textArea1;
     private JScrollPane scrollPane1;
     private JEditorPane inputText;
     private JPanel panel2;
