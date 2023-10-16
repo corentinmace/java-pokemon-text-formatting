@@ -1,4 +1,4 @@
-JFDML JFormDesigner: "8.1.1.0.298" Java: "17.0.8" encoding: "UTF-8"
+JFDML JFormDesigner: "8.1.1.0.298" Java: "17.0.6" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
@@ -38,6 +38,11 @@ new FormModel {
 					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 						"value": "cell 2 0"
 					} )
+					add( new FormComponent( "javax.swing.JTextArea" ) {
+						name: "textArea1"
+					}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+						"value": "cell 0 1"
+					} )
 					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 						name: "scrollPane1"
 						"preferredSize": &Dimension0 new java.awt.Dimension( 580, 22 )
@@ -76,16 +81,28 @@ new FormModel {
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
 							name: "presetInput"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "presetInput", true ) )
+							addEvent( new FormEvent( "java.awt.event.ItemListener", "itemStateChanged", "presetInputItemStateChanged", true ) )
+							addEvent( new FormEvent( "java.beans.PropertyChangeListener", "propertyChange", "presetInputPropertyChange", true ) )
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "presetInput", true ) )
 						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 							"value": "cell 0 1"
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "linesInput"
+							"model": new javax.swing.SpinnerNumberModel {
+								stepSize: 1l
+								value: 0l
+							}
 						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 							"value": "cell 1 1"
 						} )
 						add( new FormComponent( "javax.swing.JSpinner" ) {
 							name: "charInput"
+							"model": new javax.swing.SpinnerNumberModel {
+								stepSize: 1l
+								value: 0l
+							}
 						}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 							"value": "cell 2 1"
 						} )

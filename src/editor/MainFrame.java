@@ -6,21 +6,36 @@ package editor;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import javax.swing.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import net.miginfocom.swing.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import utils.Colors;
 import utils.Format;
 
+
+
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * @author PC- Corentin
  */
 public class MainFrame extends JFrame {
 
-    public static void main(String[] args) {
+    private static final ArrayList<Long> presetsChar = new ArrayList<>();
+    private static final ArrayList<Long> presetsLines = new ArrayList<>();
+
+    public static void main(String[] args) throws IOException, ParseException {
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf());
         } catch (Exception ex) {
@@ -29,15 +44,43 @@ public class MainFrame extends JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame();
+            MainFrame mainFrame = null;
+            try {
+                mainFrame = new MainFrame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
             mainFrame.setVisible(true);
         });
 
         String test = Colors.addColorsCodes("Bonjour tout         le monde\nn      aaza    zdza", "red", 4);
         System.out.println(Format.removeExtraSpaces(test));
     }
-    public MainFrame() {
+    public MainFrame() throws IOException, ParseException {
         initComponents();
+
+        // Read json with org.json.simple
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("/Users/corentinmace/Documents/Projects/pokeds-text-formatter/ressources/format_preset.json"));
+
+        for (Object o : jsonArray) {
+            JSONObject preset = (JSONObject) o;
+
+            String name = (String) preset.get("name");
+            presetInput.addItem(name);
+
+            Long lines = (Long) preset.get("lines");
+            presetsLines.add(lines);
+
+            Long chars = (Long) preset.get("chars");
+            presetsChar.add(chars);
+        }
+        System.out.println(presetsLines);
+
+        charInput.getModel().setValue(presetsChar.get(0));
+        linesInput.getModel().setValue(presetsLines.get(0));
     }
 
     private void thisWindowClosing(WindowEvent e) {
@@ -53,6 +96,26 @@ public class MainFrame extends JFrame {
         // TODO add your code here
     }
 
+    private void createUIComponents() {
+        // TODO: add custom component creation code here
+    }
+
+    private void presetInput(ActionEvent e) {
+        if(presetInput.getSelectedIndex() == -1) return;
+        if(presetsChar.size() == 0 || presetsLines.size() == 0) return;
+        int index = presetInput.getSelectedIndex();
+        charInput.getModel().setValue(presetsChar.get(index));
+        linesInput.getModel().setValue(presetsLines.get(index));
+    }
+
+    private void presetInputItemStateChanged(ItemEvent e) {
+        // TODO add your code here
+    }
+
+    private void presetInputPropertyChange(PropertyChangeEvent e) {
+        // TODO add your code here
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         menuBar1 = new JMenuBar();
@@ -62,6 +125,7 @@ public class MainFrame extends JFrame {
         gen4pan = new JPanel();
         label1 = new JLabel();
         label2 = new JLabel();
+        textArea1 = new JTextArea();
         scrollPane1 = new JScrollPane();
         inputText = new JEditorPane();
         panel2 = new JPanel();
@@ -150,6 +214,7 @@ public class MainFrame extends JFrame {
                 label2.setText("Preview");
                 label2.setFont(new Font("Yu Gothic UI", Font.BOLD, 16));
                 gen4pan.add(label2, "cell 2 0");
+                gen4pan.add(textArea1, "cell 0 1");
 
                 //======== scrollPane1 ========
                 {
@@ -184,8 +249,22 @@ public class MainFrame extends JFrame {
                     charLabel.setText("Characters");
                     charLabel.setLabelFor(charInput);
                     panel2.add(charLabel, "cell 2 0");
+
+                    //---- presetInput ----
+                    presetInput.addActionListener(e -> {
+			presetInput(e);
+			presetInput(e);
+		});
+                    presetInput.addItemListener(e -> presetInputItemStateChanged(e));
+                    presetInput.addPropertyChangeListener(e -> presetInputPropertyChange(e));
                     panel2.add(presetInput, "cell 0 1");
+
+                    //---- linesInput ----
+                    linesInput.setModel(new SpinnerNumberModel(0L, null, null, 1L));
                     panel2.add(linesInput, "cell 1 1");
+
+                    //---- charInput ----
+                    charInput.setModel(new SpinnerNumberModel(0L, null, null, 1L));
                     panel2.add(charInput, "cell 2 1");
                 }
                 gen4pan.add(panel2, "cell 0 2,grow");
@@ -253,6 +332,7 @@ public class MainFrame extends JFrame {
     private JPanel gen4pan;
     private JLabel label1;
     private JLabel label2;
+    private JTextArea textArea1;
     private JScrollPane scrollPane1;
     private JEditorPane inputText;
     private JPanel panel2;
