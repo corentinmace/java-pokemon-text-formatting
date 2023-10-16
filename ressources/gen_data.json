@@ -1,0 +1,43 @@
+{
+  "4": {
+    "regex": {
+      "full": "\\vFF00\\x0001(\\x0001|あ|ぁ)(.*)\\vFF00\\x0001\\x0000",
+      "start": ["^\\vFF00\\x0001(\\x0001|あ|ぁ)", "\\vFF00\\x0001"],
+      "both": "\\vFF00\\x0001(\\x0001|あ|ぁ)|\\vFF00\\x0001\\x0000",
+      "end": "\\vFF00\\x0001\\x0000/g",
+      "color_code": "\\x0001|あ|ぁ"
+    },
+    "colors": {
+      "\\x0001": "text-G4red",
+      "あ": "text-G4green",
+      "ぁ": "text-G4blue"
+    },
+    "whitespaces": {
+      "newline":"\\n",
+      "advance":"\\r",
+      "flow": "\\f"
+    }
+  },
+  "5": {
+    "regex": {
+      "full": "[COLOR([1-6])].*[COLOR(0)]",
+      "start": ["^[COLOR([1-6])]/g", "/[COLOR("],
+      "both": "[COLOR([1-6])]|[COLOR(0)]",
+      "end": "[COLOR(0)]",
+      "color_code": "(?<=<span class=\")([1-6])])"
+    },
+    "colors": {
+    "1)]": "text-G5red",
+    "2)]": "text-G5blue",
+    "3)]": "text-G5yellow",
+    "4)]": "text-G5green",
+    "5)]": "text-G5orange",
+    "6)]": "text-G5pink"
+    },
+    "whitespaces": {
+      "newline":"\\n",
+      "advance":"\\c",
+      "flow": "\\r"
+    }
+  }
+}

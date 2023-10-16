@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Overworld",
+    "lines": 2,
+    "char": 39
+  },
+  {
+    "name": "PokéDex",
+    "lines": 3,
+    "char": 38
+  }
+]
