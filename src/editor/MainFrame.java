@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import net.miginfocom.swing.*;
@@ -21,6 +22,7 @@ import utils.JSON;
 
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author PC- Corentin
@@ -44,9 +46,6 @@ public class MainFrame extends JFrame {
             }
             mainFrame.setVisible(true);
         });
-
-        String test = Colors.addColorsCodes("Bonjour tout         le monde\nn      aaza    zdza", "red", 4);
-        System.out.println(Format.removeExtraSpaces(test));
     }
     public MainFrame() throws IOException, ParseException {
         initComponents();
@@ -60,9 +59,11 @@ public class MainFrame extends JFrame {
             presetInput.addItem(name);
         }
 
+
         charInput.getModel().setValue(utils.JSON.getKeyFromJSON(0, generationPresets, "chars"));
         linesInput.getModel().setValue(utils.JSON.getKeyFromJSON(0, generationPresets, "lines"));
     }
+
 
     private void thisWindowClosing(WindowEvent e) {
         int returnVal = JOptionPane.showConfirmDialog(this,
@@ -96,6 +97,14 @@ public class MainFrame extends JFrame {
         // TODO add your code here
     }
 
+    private void linesInputStateChanged(ChangeEvent e) {
+
+    }
+
+    private void charInputStateChanged(ChangeEvent e) {
+
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         menuBar1 = new JMenuBar();
@@ -121,8 +130,27 @@ public class MainFrame extends JFrame {
         label5 = new JLabel();
         scrollPane2 = new JScrollPane();
         inputText2 = new JEditorPane();
-        gen5pan = new JPanel();
-        textField1 = new JTextField();
+        gen5pan2 = new JPanel();
+        label3 = new JLabel();
+        label4 = new JLabel();
+        scrollPane3 = new JScrollPane();
+        inputText3 = new JEditorPane();
+        scrollPane5 = new JScrollPane();
+        textArea1 = new JTextArea();
+        panel3 = new JPanel();
+        presetLabel2 = new JLabel();
+        linesLabel2 = new JLabel();
+        charLabel2 = new JLabel();
+        presetInput2 = new JComboBox();
+        linesInput2 = new JSpinner();
+        charInput2 = new JSpinner();
+        separator5 = new JSeparator();
+        separator6 = new JSeparator();
+        separator7 = new JSeparator();
+        separator8 = new JSeparator();
+        label6 = new JLabel();
+        scrollPane4 = new JScrollPane();
+        inputText4 = new JEditorPane();
 
         //======== this ========
         setTitle("Pok\u00e9DS Text Formatter by Kuha");
@@ -239,10 +267,12 @@ public class MainFrame extends JFrame {
 
                     //---- linesInput ----
                     linesInput.setModel(new SpinnerNumberModel(0L, null, null, 1L));
+                    linesInput.addChangeListener(e -> linesInputStateChanged(e));
                     panel2.add(linesInput, "cell 1 1");
 
                     //---- charInput ----
                     charInput.setModel(new SpinnerNumberModel(0L, null, null, 1L));
+                    charInput.addChangeListener(e -> charInputStateChanged(e));
                     panel2.add(charInput, "cell 2 1");
                 }
                 gen4pan.add(panel2, "cell 0 2,grow");
@@ -268,19 +298,11 @@ public class MainFrame extends JFrame {
             }
             tabbedPane1.addTab("Gen 4 (HGSS, DPPt)", gen4pan);
 
-            //======== gen5pan ========
+            //======== gen5pan2 ========
             {
-                gen5pan.setLayout(new MigLayout(
+                gen5pan2.setLayout(new MigLayout(
                     "fill,hidemode 3",
                     // columns
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
-                    "[fill]" +
                     "[fill]" +
                     "[fill]" +
                     "[fill]" +
@@ -291,10 +313,104 @@ public class MainFrame extends JFrame {
                     "[]" +
                     "[]" +
                     "[]" +
+                    "[]" +
                     "[]"));
-                gen5pan.add(textField1, "cell 1 1 5 4,grow");
+
+                //---- label3 ----
+                label3.setText("Your Text");
+                label3.setFont(new Font("Yu Gothic UI", Font.BOLD, 16));
+                label3.setLabelFor(inputText3);
+                gen5pan2.add(label3, "cell 0 0,aligny bottom,grow 100 0,height 20:20:20");
+
+                //---- label4 ----
+                label4.setText("Preview");
+                label4.setFont(new Font("Yu Gothic UI", Font.BOLD, 16));
+                gen5pan2.add(label4, "cell 2 0");
+
+                //======== scrollPane3 ========
+                {
+                    scrollPane3.setPreferredSize(new Dimension(580, 22));
+                    scrollPane3.setViewportView(inputText3);
+                }
+                gen5pan2.add(scrollPane3, "cell 0 1,grow,width 400:400,height 200:200:200");
+
+                //======== scrollPane5 ========
+                {
+
+                    //---- textArea1 ----
+                    textArea1.setText("rzzsqd&\u00b2\u00b2");
+                    scrollPane5.setViewportView(textArea1);
+                }
+                gen5pan2.add(scrollPane5, "cell 2 1");
+
+                //======== panel3 ========
+                {
+                    panel3.setLayout(new MigLayout(
+                        "fill,hidemode 3",
+                        // columns
+                        "[fill]" +
+                        "[fill]" +
+                        "[fill]",
+                        // rows
+                        "[]" +
+                        "[]"));
+
+                    //---- presetLabel2 ----
+                    presetLabel2.setText("Preset");
+                    presetLabel2.setLabelFor(presetInput2);
+                    panel3.add(presetLabel2, "cell 0 0");
+
+                    //---- linesLabel2 ----
+                    linesLabel2.setText("Lines");
+                    linesLabel2.setLabelFor(linesInput2);
+                    panel3.add(linesLabel2, "cell 1 0");
+
+                    //---- charLabel2 ----
+                    charLabel2.setText("Characters");
+                    charLabel2.setLabelFor(charInput2);
+                    panel3.add(charLabel2, "cell 2 0");
+
+                    //---- presetInput2 ----
+                    presetInput2.addActionListener(e -> {
+			presetInput(e);
+			presetInput(e);
+		});
+                    presetInput2.addItemListener(e -> presetInputItemStateChanged(e));
+                    presetInput2.addPropertyChangeListener(e -> presetInputPropertyChange(e));
+                    panel3.add(presetInput2, "cell 0 1");
+
+                    //---- linesInput2 ----
+                    linesInput2.setModel(new SpinnerNumberModel(0L, null, null, 1L));
+                    linesInput2.addChangeListener(e -> linesInputStateChanged(e));
+                    panel3.add(linesInput2, "cell 1 1");
+
+                    //---- charInput2 ----
+                    charInput2.setModel(new SpinnerNumberModel(0L, null, null, 1L));
+                    charInput2.addChangeListener(e -> charInputStateChanged(e));
+                    panel3.add(charInput2, "cell 2 1");
+                }
+                gen5pan2.add(panel3, "cell 0 2,grow");
+                gen5pan2.add(separator5, "cell 0 3");
+                gen5pan2.add(separator6, "cell 1 3");
+                gen5pan2.add(separator7, "cell 2 3");
+                gen5pan2.add(separator8, "cell 3 3");
+
+                //---- label6 ----
+                label6.setText("Output");
+                label6.setFont(new Font("Yu Gothic UI", Font.BOLD, 16));
+                gen5pan2.add(label6, "cell 0 4");
+
+                //======== scrollPane4 ========
+                {
+                    scrollPane4.setPreferredSize(new Dimension(580, 22));
+
+                    //---- inputText4 ----
+                    inputText4.setEditable(false);
+                    scrollPane4.setViewportView(inputText4);
+                }
+                gen5pan2.add(scrollPane4, "cell 0 5,grow,width 280:280,height 150:150:150");
             }
-            tabbedPane1.addTab("Gen 5 (BW, BW2) ", gen5pan);
+            tabbedPane1.addTab("Gen 5 (BW/BW2)", gen5pan2);
         }
         contentPane.add(tabbedPane1, "pad 0,cell 0 0,align left top,grow 0 0,width pref:1280:max,height pref:720:max");
         pack();
@@ -326,7 +442,26 @@ public class MainFrame extends JFrame {
     private JLabel label5;
     private JScrollPane scrollPane2;
     private JEditorPane inputText2;
-    private JPanel gen5pan;
-    private JTextField textField1;
+    private JPanel gen5pan2;
+    private JLabel label3;
+    private JLabel label4;
+    private JScrollPane scrollPane3;
+    private JEditorPane inputText3;
+    private JScrollPane scrollPane5;
+    private JTextArea textArea1;
+    private JPanel panel3;
+    private JLabel presetLabel2;
+    private JLabel linesLabel2;
+    private JLabel charLabel2;
+    private JComboBox presetInput2;
+    private JSpinner linesInput2;
+    private JSpinner charInput2;
+    private JSeparator separator5;
+    private JSeparator separator6;
+    private JSeparator separator7;
+    private JSeparator separator8;
+    private JLabel label6;
+    private JScrollPane scrollPane4;
+    private JEditorPane inputText4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

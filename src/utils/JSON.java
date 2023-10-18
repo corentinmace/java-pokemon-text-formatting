@@ -37,7 +37,7 @@ public class JSON {
      */
     public static Object getKeyFromJSON(Integer index, JSONArray arr, String key) {
         JSONObject obj = (JSONObject) arr.get(index);
-        return obj.get("chars");
+        return obj.get(key);
 
     }
 }
