@@ -8,6 +8,10 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static utils.ResourceUtils.getResourcePath;
 
 public class JSON {
 
@@ -22,7 +26,8 @@ public class JSON {
      */
     public static JSONArray parseJsonToArray(String resourcePath) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        String path = JSON.class.getResource("/" + resourcePath).getFile();
+
+        String path = getResourcePath(resourcePath);
         String formattedPath = URLDecoder.decode(path, "UTF-8");
         return (JSONArray) parser.parse(new FileReader(formattedPath));
     }

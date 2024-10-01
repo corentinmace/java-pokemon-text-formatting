@@ -24,6 +24,8 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Objects;
 
+import static utils.ResourceUtils.getResourcePath;
+
 /**
  * @author PC- Corentin
  */
@@ -156,7 +158,8 @@ public class MainFrame extends JFrame {
         setTitle("Pok\u00e9DS Text Formatter by Kuha");
         setMinimumSize(new Dimension(1280, 0));
         setResizable(false);
-        setIconImage(new ImageIcon(getClass().getResource("/appIcon.png")).getImage());
+
+        setIconImage(new ImageIcon(getResourcePath("appIcon.png")).getImage());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
